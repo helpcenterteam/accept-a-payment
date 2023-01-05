@@ -3,31 +3,39 @@
 :root {
   --light-grey: #F6F9FC;
   --dark-terminal-color: #0A2540;
-  --accent-color: #635BFF;
+  --accent-color: #5a98d3;
   --radius: 3px;
 }
 
 body {
-  padding: 20px;
+  padding: 10px;
   font-family: 'Raleway';
   display: flex;
   justify-content: center;
   font-size: 1.2em;
   color: var(--dark-terminal-color);
+  background-color: white;
 }
 
 main {
-  width: 480px;
+  width: 100%;
 }
 
 form > * {
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 button {
   background-color: var(--accent-color);
 }
 
+.flex-parent {
+  display: flex;
+}
+
+.jc-center {
+  justify-content: center;
+}
 button {
   background: var(--accent-color);
   border-radius: var(--radius);
@@ -39,6 +47,7 @@ button {
   cursor: pointer;
   transition: all 0.2s ease;
   display: block;
+  width: 50%;
 }
 button:hover {
   filter: contrast(115%);
@@ -77,18 +86,18 @@ fieldset, input, select {
 }
 
 #payment-form {
-  border: #F6F9FC solid 1px;
-  border-radius: var(--radius);
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 30px 50px -20px rgb(50 50 93 / 25%), 0 30px 60px -30px rgb(0 0 0 / 30%);
+  /* border: #F6F9FC solid 1px;
+  border-radius: var(--radius);*/
+  padding: 0px;
+  margin: 0px 0;
+  /* box-shadow: 0 30px 50px -20px rgb(50 50 93 / 25%), 0 30px 60px -30px rgb(0 0 0 / 30%);*/
 }
 
 #messages {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New';
   display: none; /* hide initially, then show once the first message arrives */
   background-color: #0A253C;
-  color: #00D924;
+  color: white;
   padding: 20px;
   margin: 20px 0;
   border-radius: var(--radius);

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tiledesk-stripe-payment</title>
+  <style>
+    html, body {
+  width: 100%;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-family: "DM Sans", sans-serif;
+  font-size: 10;
+  line-height: 1.3;
+  background-color: white;
+  padding: 0 1rem;
+}
+    label {
+     display: flex;
+     align-items: left;
+     justify-content: left ;
+     margin: 0 auto;
+   }
+
+select {
+     margin-bottom: 10px;
+     margin-top: 10px;
+   }
+.card-form {
+  padding: 0rem 0rem 0;
+}
+
+input.input-field, textarea { 
+  background: white;
+}
+    
+.input {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.input + .input {
+  margin-top: 5px;
+}
+.input-label {
+  color: black;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  transition: 0.25s ease;
+  font-size: 14px
+}
+.input-field {
+  border: solid 1px #d8d8d8;
+  z-index: 1;
+  background-color: transparent;
+  width: 160%;
+  
+  font: inherit;
+  padding: 0.25rem 0;
+}
+.input-field:focus, .input-field:valid {
+  outline: 0;
+  border-bottom-color: white;
+}
+.input-field:focus + .input-label, .input-field:valid + .input-label {
+  color: #6658d3;
+  transform: translateY(-1.5rem);
+}
+.action {
+  margin-top: 5px;
+}
+.action-button {
+  font: inherit;
+  font-size: 1.00rem;
+  padding: 10px;
+  margin-top: 15px;
+  width: 100%;
+  font-weight: 500;
+  background-color: #0ba2dc;
+  border-radius: 16px;
+  color: white;
+  border: 0;
+  cursor: pointer;
+}
+.action-button:focus {
+  outline: 0;
+}
+.action-button:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+.action-button:active {
+  box-shadow: none;
+  transform: translateY(0);
+} 
+#myDIV {
+  width: 100%;
+  padding: 50px 0;
+  text-align: center;
+  background-color: lightblue;
+  margin-top: 10px;
+}
+
+.copy-form {
+  padding: 6px 36px 6px 14px;
+}
+.custom-input {
+  height: 35px;
+  width: 200px;
+  border: solid 2px #d8d8d8;
+}
+
+.custom-input:hover {
+  border-color: #0ba2dc;
+}
+
+.custom-input:focus {
+  border-color: #0ba2dc;
+}
+
+.custom-tooltip {
+  position: relative;
+  display: inline-block;
+  color: #0ba2dc;
+}
+
+/* Tooltip text */
+.custom-tooltip .custom-tooltiptext {
+  font-family: 'Poppins';
+  visibility: hidden;
+  width: 300px;
+  background-color: #8c8e8fbd;
+  font-size: 13px;
+  color: #fff;
+  text-align: center;
+  padding: 8px 8px;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  margin-left: 8px;
+  margin-top: -15px;
+  
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.custom-tooltip:hover .custom-tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+    .green-circle {
+  color: green;
+  margin-right: 6px;
+}
+
+.red-circle {
+  color: #f0593d;
+  margin-right: 6px;
+}
+  </style>
+  <script>
+  window.addEventListener("message", (event) => {
+    console.log('addEventListener_frame: ', event)
+    if(event.data){
+    //GET TOK  EN FROM PAGE TILEDESK
+    const token = document.getElementById("token");
+    console.log('token: ',token)
+    //token.value = JSON.stringify(event.data.token);
+    token.value = event.data.token;
+    console.log('token.value: ',event.data.toksen)
+    var projectId = document.getElementById("projectId");
+    //projectId.value = JSON.stringify(event.data.request.department.id_project);
+    if(event.data.request.id_project){
+      projectId.value = event.data.request.id_project;
+      // ESEMPIO PER LEGGERE LA MAIL DELL'UTENTE
+      //projectId.value = event.data.request.lead;  
+      console.log('projectId: ',projectId.value)
+    }
+    
+    request_id.value = event.data.request.request_id;
+    console.log('request_id: ',request_id.value);
+       }
+}, false);
+ 
+  </script>  
+</head>
+
+<body>
+  <script src="https://replit.com/public/js/replit-badge.js" theme="blue" defer></script>
+  <div id="form" class="container">
+   <div id="updPay" style="display: block; width: 100%;">
+    <p class="input-label" id="app_name" style="text-align:center; margin-bottom: 20px;">Setup the App</p>
+
+   
+          
+              <!-- Stripe publishable key -->
+              <label class="input-label" for="stripe_publishable_key">Stripe publishable key</label>
+              <div style="display: flex; flex-direction: row;">
+                <div style="width: 220px;">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                      <input type="text"  class="form-control copy-form custom-input" name="stripe_publishable_key" id="stripe_publishable_key" value="{{ stripe_publishable_key}}" placeholder="Enter the publishable key">
+                      <span style="margin-left: 10px;">
+                        <i class="fa fa-question-circle custom-tooltip">
+                          <span class="custom-tooltiptext">This is the Stripe publishable key.</span>
+                        </i>
+                      </span>
+                    </div>
+                </div>
+              </div>
+           
+             <!-- Stripe publishable key -->
+              <label class="input-label" for="stripe_wehook_segret">Stripe wehook segret</label>
+              <div style="display: flex; flex-direction: row;">
+                <div style="width: 220px;">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                      <input type="text"  class="form-control copy-form custom-input" name="stripe_wehook_segret" id="stripe_wehook_segret" value="{{ stripe_wehook_segret}}" placeholder="Enter the wehook segret">
+                      <span style="margin-left: 10px;">
+                        <i class="fa fa-question-circle custom-tooltip">
+                          <span class="custom-tooltiptext">This is the Stripe wehook segret.</span>
+                        </i>
+                      </span>
+                    </div>
+                </div>
+              </div>
+
+
+              
+    </div>
+          
+
+     <!-- SEND TOKEN TO INDEX.JS -->
+    <input type='hidden' id='token' name='token' />
+    <input type='hidden' id='projectId' name='projectId' />
+    <input type='hidden' id='request_id' name='request_id' />
+     <div class="action">
+      <button id='upd_btn' class="action-button">Save configuration</button>
+    </div>
+     </div>
+  </div>
+ <script>
+    function sendData( data ) {
+      const XHR = new XMLHttpRequest();
+      let urlEncodedData = "",
+          urlEncodedDataPairs = [],
+          name;
+      for( name in data ) {
+        urlEncodedDataPairs.push( encodeURIComponent( name ) + '=' + encodeURIComponent( data[name] ) );
+      }
+      urlEncodedData = urlEncodedDataPairs.join( '&' ).replace( /%20/g, '+' );
+      XHR.addEventListener("loadend", function(event) {
+        console.log( 'payment configured!' );
+        console.log('request_id',request_id.value);
+        console.log('projectId',projectId.value);
+        window.location.href = "https://accept-a-payment-app-into-chat.leomirco.repl.co/payment?request_id="+request_id.value+"&project_id="+projectId.value+"&app_name=Create%Payment%20on%20Stripe";
+      });
+      XHR.addEventListener( 'error', function(event) {
+        console.log( 'Oops! Something went wrong.' );
+      } );
+      XHR.open( 'POST', '/configure' );
+      XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+      XHR.send( urlEncodedData );
+    }
+    const error = document.getElementById('error');   
+    const upd_btn = document.getElementById('upd_btn');
+    upd_btn.addEventListener( 'click', function() {
+      console.log('PREMUTO');
+      const stripe_publishable_key = document.getElementById('stripe_publishable_key');
+      console.log("stripe_publishable_key insert: ", stripe_publishable_key.value);
+      const stripe_wehook_segret = document.getElementById('stripe_wehook_segret');
+      console.log("stripe_wehook_segret insert: ", stripe_wehook_segret.value);
+      sendData( {
+          projectId: projectId.value,
+          stripe_publishable_key:stripe_publishable_key.value,
+          stripe_wehook_segret: stripe_wehook_segret.value
+        });
+    });
+  </script>
+</body>
+</html>

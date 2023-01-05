@@ -1,0 +1,30 @@
+{
+  "name": "accept-a-payment",
+  "version": "1.0.0",
+  "description": "_Learn how to securely accept payments online._",
+  "main": "/server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helpcenterteam/accept-a-payment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/helpcenterteam/accept-a-payment/issues"
+  },
+  "homepage": "https://github.com/helpcenterteam/accept-a-payment#readme",
+  "dependencies": {
+    "@replit/database": "^2.0.2",
+    "@tiledesk/tiledesk-client": "^0.8.41",
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "handlebars": "^4.7.7",
+    "node-fetch": "^3.3.0",
+    "stripe": "^10.17.0"
+  }
+}

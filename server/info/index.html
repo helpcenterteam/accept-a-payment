@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+        integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+        </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/configure.css">
+
+    <style>
+      body {
+        font-family: 'Poppins', serif;
+      }
+    </style>
+  
+</head>
+<body>
+  
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-content">
+      <div class="logo-title">
+        <div class="logo-container">
+          <img src="https://www.clipartmax.com/png/small/38-381637_cash-advance-payment.png" width="60px" height="60px">
+        </div>
+        <div class="title-version">
+          <p class="title">Stripe Payment Connector</p>
+          <div class="status-box" style="padding: 0px 8px; letter-spacing: 1px; height: 18px;"> 
+            <p style="margin-bottom: 0px;">1.0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO BOX -->
+  <div class="info-box">
+    <div class="info-list">
+       <ul>
+          <div class="list-element">
+          <img src="https://cdn-icons-png.flaticon.com/512/1443/1443000.png" width=20 height=20 style="margin-right: 10px;"/>
+          <h7>Creating a payment directly on the Stripe platform</h7>
+        </div>
+        <div class="list-element">
+          <img src="https://cdn-icons-png.flaticon.com/512/1443/1443000.png" width=20 height=20 style="margin-right: 10px;"/>
+          <h7>The Agent creates a direct payment to a customer during the Chat conversation</h7>
+        </div>
+        <div class="list-element">
+          <img src="https://cdn-icons-png.flaticon.com/512/1443/1443000.png" width=20 height=20 style="margin-right: 10px;"/>
+          <h7>The Customer makes the payment in the chat with the agent during the conversation</h7>
+        </div>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Docs Section -->
+  <div class="docs-box">
+  <div class="docs-section">
+    <p style="margin-top: 20px; font-size: 18px; font-weight: 600;">Before you start</p>
+    <div style="padding: 20px; background-color: #2fa2dc24; border-radius: 8px; width: 600px; margin-bottom: 5px;">
+      <div style="display: flex; flex-direction: row; align-items: baseline;">
+        <div>
+          <img src="https://freeiconshop.com/wp-content/uploads/edd/arrow-flat.png" width="20px" height="auto" style="margin-right: 10px;"> 
+        </div>
+        <div>
+          <a href="https://gethelp.tiledesk.com/articles/connect-tiledesk-with-your-stripe-account/" target="_blank">Connect Tiledesk with your Stripe account</a>
+          <p style="color: grey; margin-bottom: 0px;">A guide on how to connect your Stripe account with Tiledesk to receive payments from your customers in total security</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+<!-- CONFIGURE BOX -->
+  <div class="configure-box" style='display: none'>
+    <div class="configure">
+      <p class="title" style="margin-bottom: 20px;">Your Stripe Configuration</p>
+      <div style="min-width: 600px">
+          <form action="./update" method="post">
+            <div class="form-group" style="width: 590px;">
+              <!-- Stripe publishable key -->
+              <label class="input-label" for="stripe_publishable_key">Stripe publishable key</label>
+              <div style="display: flex; flex-direction: row;">
+                <div style="width: 522px;">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                      <input type="text" readonly class="form-control copy-form custom-input" name="stripe_publishable_key" id="stripe_publishable_key" value="{{ stripe_publishable_key}}" placeholder="Enter the Stripe wehook segret">
+                      <span style="margin-left: 10px;">
+                        <i class="fa fa-question-circle custom-tooltip">
+                          <span class="custom-tooltiptext">This is the Stripe publishable key.</span>
+                        </i>
+                      </span>
+                    </div>
+                </div>
+              </div>
+            </div>
+             <!-- Stripe publishable key -->
+              <label class="input-label" for="stripe_wehook_segret">Stripe wehook segret</label>
+              <div style="display: flex; flex-direction: row;">
+                <div style="width: 522px;">
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                      <input type="text" readonly class="form-control copy-form custom-input" name="stripe_wehook_segret" id="stripe_wehook_segret" value="{{ stripe_wehook_segret}}" placeholder="Enter the Stripe wehook segret">
+                      <span style="margin-left: 10px;">
+                        <i class="fa fa-question-circle custom-tooltip">
+                          <span class="custom-tooltiptext">This is the Stripe wehook segret.</span>
+                        </i>
+                      </span>
+                    </div>
+                </div>
+              </div>
+            </div>
+  
+            <div style="width: 500px; text-align: right;">
+                <input type="submit" class="btn" style="width: 200px; background-color: #0ba2dc; color: white; font-weight: 500;" value="Update">
+              </div>
+          </form>
+        </div> 
+    </div>
+  </div>
+
+   <script>                   
+    function copyTextToClipboard() {
+      const proxyUrl = document.getElementById('proxy_url').select()
+      
+      //document.querySelector('textarea').select();
+      try {
+        document.execCommand('copy');
+        console.log('Async: Copied to clipboard!');
+        let el1 = document.getElementById('copy-div');
+        el1.style.visibility = 'hidden';
+
+        let el2 = document.getElementById('copied-div');
+        el2.style.visibility = 'visible';
+
+        //let btn = document.getElementById('copy-btn');
+        //btn.value = "Copied!";
+      } catch (err) {
+        console.error('Async: Could not copy text: ', err);
+      }
+    }
+</script>
+  
+</body>
