@@ -101,6 +101,7 @@ router.get('/payment', async (req, res) => {
   var page = '';
   var dir = '';
   //READ THE CONFIGURATION FILE
+  console.log('req START ', req);
   console.log('req project_id ', req.query.project_id);
   var projectId = req.query.project_id;
   var sett = await db.get(projectId);
@@ -345,7 +346,7 @@ router.post('/webhook', async (req, res) => {
     // To cancel the payment after capture you will need to issue a Refund (https://stripe.com/docs/api/refunds)
     console.log('💰 Payment captured!');
     // set url as constant
-    const url = 'https://accept-a-payment-App-into-Chat.leomirco.repl.co/payment/succeeded';
+    const url = DOMAIN + '/payment/succeeded';
     const customHeaders = {
       "Content-Type": "application/json",
     }
@@ -416,7 +417,7 @@ router.post('/payment/created', async (req, res) => {
   console.log('customer_name: ', customer_name)
 
   // ATTENTION ONLY FOR DEBUG LOG 
-  var msg = 'https://accept-a-payment-App-into-Chat.leomirco.repl.co/?&currency=' + currency + '&amount=' + amount + '&description=' + description + '&orderId=' + orderId + '&token=' + token + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId;
+  var msg = DOMAIN + '/?&currency=' + currency + '&amount=' + amount + '&description=' + description + '&orderId=' + orderId + '&token=' + token + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId;
   console.log('post-Call Stripe: ' + msg)
 
   // create a TiledeskClient instance
@@ -430,7 +431,7 @@ router.post('/payment/created', async (req, res) => {
     type: "frame",
     text: "Payment of " + currency + " " + amount + " !",
     metadata: {
-      src: 'https://accept-a-payment-App-into-Chat.leomirco.repl.co/?currency=' + currency + '&amount=' + (amount * 100) + '&description=' + description + '&orderId=' + orderId + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId,
+      src: DOMAIN + '/?currency=' + currency + '&amount=' + (amount * 100) + '&description=' + description + '&orderId=' + orderId + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId,
       width: '100%',
       height: '330px'
     }

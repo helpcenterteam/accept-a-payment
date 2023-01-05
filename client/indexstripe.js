@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { publishableKey } = await fetch('/config?projectId=' + projectId).then((r) => r.json());
   if (!publishableKey) {
     addMessage(
-      'No publishable key returned from the server. Please check `.env` and try again'
+      'No publishable key returned from the server. Please configure the App and try again'
     );
-    alert('Please set your Stripe publishable API key in the .env file');
+    alert('Please set your Stripe publishable API key in the configure function');
   } else {
     console.log('USER KEY - publishableKey', publishableKey);
   }
@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   console.log('stripe: ', stripe)
   //-------------------------------------------
-  //var customerId = url.searchParams.get("customerid");
-  //console.log('customerid', customerId);
   var currency = url.searchParams.get("currency");
   console.log('currency', currency);
   var amount = url.searchParams.get("amount");
@@ -43,8 +41,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // On page load, we create a PaymentIntent on the server so that we have its clientSecret to
   // initialize the instance of Elements below. The PaymentIntent settings configure which payment
   // method types to display in the PaymentElement.
-  //ATTENTO
-  let url_post = new URL('https://accept-a-payment-App-into-Chat.leomirco.repl.co/create-payment-intent');
+  //ATTENTO URL DA MODIFICARE CON PRODUZIONE
+  console.log('DOMAIN - url', url.origin);
+  let url_post = new URL(url.origin + '/create-payment-intent');
   let params = { 'currency': currency, 'amount': amount, 'description': description, 'orderId': orderId, 'customer_mail': customer_mail, 'customer_name': customer_name };
   url_post.search = new URLSearchParams(params);
   //---------------------------------------------------------------------------
