@@ -9,14 +9,12 @@ const { TiledeskClient } = require('@tiledesk/tiledesk-client');
 var assert = require('assert');
 // Update 16/12/22 CHANGE ENV
 require('dotenv').config();
-//const express = require('express');
 const fs = require('fs');
 const handlebars = require('handlebars');
 const pjson = require('./package.json');
 // import node-fetch
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) =>
   fetch(...args));
-//const app = express();
 router.use(bodyParser.urlencoded({ extended: false }));
 const { resolve } = require('path');
 // CONFIG ENV
@@ -44,9 +42,6 @@ let db = new KVBase();
 let orderId;
 let id;
 const max = 100000;
-//app.use(express.static(process.env.STATIC_DIR));
-// UPDATE 05/01/23
-//router.use(express.static(process.env.STATIC_DIR));
 
 router.use(
   express.json({
@@ -63,34 +58,28 @@ router.use(
 
 var DOMAIN = process.env.DOMAIN;
 var PAYMENT_METHOD_TYPES = process.env.PAYMENT_METHOD_TYPES;
-//var STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
-//var STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-//var STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET1;
-console.log('DOMAIN', DOMAIN)
-console.log('PAYMENT_METHOD_TYPES', PAYMENT_METHOD_TYPES)
-//console.log('STRIPE_PUBLISHABLE_KEY', STRIPE_PUBLISHABLE_KEY)
-//console.log('STRIPE_SECRET_KEY', STRIPE_SECRET_KEY)
-//console.log('STRIPE_WEBHOOK_SECRET', STRIPE_WEBHOOK_SECRET)
+console.log('START - DOMAIN', DOMAIN)
+console.log('START - PAYMENT_METHOD_TYPES', PAYMENT_METHOD_TYPES)
 
 var path;
 
 // READ THE INFO
 router.get('/info', async (req, res) => {
-  console.log('READ APP Stripe Info');
-  console.log('Request query: ', req.query);
+  console.log('/INFO - READ APP Stripe Info');
+  //console.log('Request query: ', req.query);
   var projectId = req.query.projectId;
   var log = false;
   var page = '/index.html';
   var dir = '/info';
   readHTMLFile(page, dir, (err, html) => {
     if (err) {
-      console.log("(ERROR) Read html file: ", err);
+      console.log("/INFO - (ERROR) Read html file: ", err);
     }
     var template = handlebars.compile(html);
     var replacements = {
     }
     if (log) {
-      console.log("Replacements: ", replacements);
+      console.log("/INFO - Replacements: ", replacements);
     }
     var html = template(replacements);
     res.send(html);
@@ -101,16 +90,16 @@ router.get('/payment', async (req, res) => {
   var page = '';
   var dir = '';
   //READ THE CONFIGURATION FILE
-  console.log('req START ', req);
-  console.log('req project_id ', req.query.project_id);
+  //console.log('req START ', req);
+  console.log('/PAYMENT - req project_id ', req.query.project_id);
   var projectId = req.query.project_id;
   var sett = await db.get(projectId);
-  console.log('Read settings APP', sett);
+  console.log('/PAYMENT - Read settings APP', sett);
   var stripe_publishable_key;
   var stripe_wehook_segret;
-  if (sett.stripe_publishable_key != '') {
+  if (sett != null && sett.stripe_publishable_key != '') {
     // SETTINGS IS OK!
-    console.log('SETTINGS IS OK!');
+    console.log('/PAYMENT - SETTINGS IS OK!');
     stripe_publishable_key = sett.stripe_publishable_key;
     stripe_wehook_segret = sett.stripe_wehook_segret;
     var log = false;
@@ -118,26 +107,25 @@ router.get('/payment', async (req, res) => {
     dir = '/payment';
     readHTMLFile(page, dir, (err, html) => {
       if (err) {
-        console.log("(ERROR) Read html file: ", err);
+        console.log("/PAYMENT - (ERROR) Read html file: ", err);
       }
       var template = handlebars.compile(html);
       var replacements = {
       }
       if (log) {
-        console.log("Replacements: ", replacements);
+        console.log("/PAYMENT - Replacements: ", replacements);
       }
       var html = template(replacements);
       res.send(html);
     })
   } else {
-    console.log('SETTINGS IS KO!');
-    console.log('Request query: ', req.query);
+    console.log('/PAYMENT - SETTINGS IS KO!');
     var log = false;
     var page = '/index.html';
     var dir = '/configure';
     readHTMLFile(page, dir, (err, html) => {
       if (err) {
-        console.log("(ERROR) Read html file: ", err);
+        console.log("/PAYMENT - (ERROR) Read html file: ", err);
       }
       var template = handlebars.compile(html);
       var replacements = {
@@ -147,7 +135,7 @@ router.get('/payment', async (req, res) => {
         stripe_wehook_segret: stripe_wehook_segret,
       }
       if (log) {
-        console.log("Replacements: ", replacements);
+        console.log("/PAYMENT - Replacements: ", replacements);
       }
       var html = template(replacements);
       res.send(html);
@@ -163,13 +151,13 @@ router.get('/', async (req, res) => {
 
 // READ THE CONFIGURATION THE APP
 router.get('/getconfigure', async (req, res) => {
-  console.log('READ APP Stripe Configure');
-  console.log('Request query: ', req.query);
+  console.log('/getconfigure - READ APP Stripe Configure');
+  //console.log('Request query: ', req.query);
   var projectId = req.query.projectId;
   var sett = await db.get(projectId);
-  console.log('APP Config project_id ', projectId);
+  console.log('/getconfigure - APP Config project_id ', projectId);
   var sett = await db.get(projectId);
-  console.log('APP Config sett ', sett);
+  console.log('/getconfigure - APP Config sett ', sett);
   var stripe_publishable_key = sett.stripe_publishable_key;
   var stripe_wehook_segret = sett.stripe_wehook_segret;
   var log = false;
@@ -177,7 +165,7 @@ router.get('/getconfigure', async (req, res) => {
   var dir = '/configure';
   readHTMLFile(page, dir, (err, html) => {
     if (err) {
-      console.log("(ERROR) Read html file: ", err);
+      console.log("/getconfigure - (ERROR) Read html file: ", err);
     }
     var template = handlebars.compile(html);
     var replacements = {
@@ -187,7 +175,7 @@ router.get('/getconfigure', async (req, res) => {
       stripe_wehook_segret: sett.stripe_wehook_segret
     }
     if (log) {
-      console.log("Replacements: ", replacements);
+      console.log("/getconfigure - Replacements: ", replacements);
     }
     var html = template(replacements);
     res.send(html);
@@ -196,34 +184,37 @@ router.get('/getconfigure', async (req, res) => {
 
 // SET CONFIGURATION THE APP
 router.post('/configure', async (req, res) => {
-  console.log('Write APP Stripe Configure');
-  console.log('Request query: ', req.body);
+  console.log('/configure - Write APP Stripe Configure');
+  //console.log('Request query: ', req.body);
   var projectId = req.body.projectId;
   var stripe_publishable_key = req.body.stripe_publishable_key;
   var stripe_wehook_segret = req.body.stripe_wehook_segret;
-  console.log('APP Config project_id ', projectId);
-  console.log('APP Config stripe_publishable_key ', stripe_publishable_key);
-  console.log('APP Config stripe_wehook_segret', stripe_wehook_segret);
+  console.log('/configure -  APP Config project_id ', projectId);
+  console.log('/configure -  APP Config stripe_publishable_key ', stripe_publishable_key);
+  console.log('/configure -  APP Config stripe_wehook_segret', stripe_wehook_segret);
   var log = true;
+  // Retrieve the event by verifying the signature using the raw body and secret.
+  if (true) {
   // SETTINGS THE APP FIRST TIME!
-  var settings = { stripe_publishable_key: stripe_publishable_key, stripe_wehook_segret: stripe_wehook_segret };
-  await db.set(projectId, settings);
-  console.log('Sett settings APP!', settings);
-  var page = '/index.html';
-  var dir = '/payment';
-  res.send({ success: true })
+    var settings = { stripe_publishable_key: stripe_publishable_key, stripe_wehook_segret: stripe_wehook_segret };
+    await db.set(projectId, settings);
+    console.log('/configure - Sett settings APP!', settings);
+    //var page = '/index.html';
+    //var dir = '/payment';
+    res.status(200).send({ success: true });
+  } else {
+    res.status(400).send(err);
+  }
 })
 
 // CONFIGURE STRIPE
 //RETURN THE CONFIG KEY IN MULTITENANT
 router.get('/config', async (req, res) => {
-  // ATTENTO PROVA
   const projectId = req.query.projectId;
-  console.log('GET KEY SEGRET: ', projectId);
+  console.log('/CONFIG - projectId: ', projectId);
   var sett = await db.get(projectId);
-  console.log('Read settings APP', sett);
+  console.log('/CONFIG - Read settings APP', sett);
   res.send({
-    //publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
     publishableKey: sett.stripe_publishable_key,
   });
 });
@@ -239,72 +230,82 @@ router.get('/create-payment-intent', async (req, res) => {
   const customer_mail = req.query.customer_mail;
   const customer_name = req.query.customer_name;
 
-  console.log('POST request: currency is:', currency);
-  console.log('POST request: amount is:', amount);
-  console.log('POST request: description is:', description);
-  console.log('POST request: orderId is:', orderId);
-  console.log('POST request: customer_mail is', customer_mail);
-  console.log('POST request: customer_name is', customer_name);
+  console.log('/create-payment-intent - POST request: currency is:', currency);
+  console.log('/create-payment-intent - POST request: amount is:', amount);
+  console.log('/create-payment-intent - POST request: description is:', description);
+  console.log('/create-payment-intent - POST request: orderId is:', orderId);
+  console.log('/create-payment-intent - POST request: customer_mail is', customer_mail);
+  console.log('/create-payment-intent - POST request: customer_name is', customer_name);
 
   // ATTENTION NOT FOR MULTITENANT WITH THE SAME CUSTOMER MAIL
-  //const customer = await stripe.customers.retrieve(
-  //'cus_MnPemk1KAXX845'
-  //);
-
   // IF a NEW MAIL THEN CREATE A NEW CUSTOMER
   // create the user if it doesn't exist
   let customerId;
   let customer = await db.get(customer_mail);
-  console.log('customer', customer);
-  if (customer === undefined || customer === null) {
+  console.log('/create-payment-intent - customer', customer);
+  if (customer === 'undefined' || customer === null) {
     try {
       customerId = await stripe.customers.create({
         name: customer_name,
         email: customer_mail,
       });
-      console.log('New customerId create: ', customerId);
+      console.log('/create-payment-intent - New customerId create: ', customerId);
       await db.set(customer_mail, customerId);
     } catch (error) {
       console.error('stripe', error);
     }
   } else {
-    console.log('Old customerId', customer.id);
+    console.log('/create-payment-intent - Old customerId', customer.id);
     customerId = customer.id;
   }
 
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      currency: currency,
-      amount: amount,
-      customer: customerId,
-      description: description,
-      payment_method_types: ['card'],
-      receipt_email: customer_mail,
-      metadata: { order_id: orderId },
-      //automatic_payment_methods: { enabled: true },
-      shipping: {
-        address: {
-          city: '',
-          line1: '',
-          line2: '',
-          postal_code: '',
-          state: ''
-        },
-        name: customer_name
-      }
-    });
-
-    // Send publishable key and PaymentIntent details to client
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-    });
-  } catch (e) {
-    return res.status(400).send({
-      error: {
-        message: e.message,
-      },
-    });
+  // Read the payment data
+  var resu = 0;
+  if (orderId != null && orderId != 'undefined') {
+    resu = await db.get(orderId);
+    console.log('/create-payment-intent - post-result', resu);
   }
+  if (resu.created < 2) {
+    console.log('/create-payment-intent - PAYMENT CREATED!');
+    var payment = { orderId: resu.orderId, projectId: resu.projectId, request_id: resu.request_id, currency: resu.currency, amount: resu.amount, description: resu.description, messageid: resu.messageid, token: resu.token, customer_mail: resu.customer_mail, customer_name: resu.customer_name, paid: false, created: 1 };
+    // SET created = 1
+    await db.set(orderId, payment);
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        currency: currency,
+        amount: amount,
+        customer: customerId,
+        description: description,
+        payment_method_types: ['card'],
+        receipt_email: customer_mail,
+        metadata: { order_id: orderId },
+        //automatic_payment_methods: { enabled: true },
+        shipping: {
+          address: {
+            city: '',
+            line1: '',
+            line2: '',
+            postal_code: '',
+            state: ''
+          },
+          name: customer_name
+        }
+      });
+
+      // Send publishable key and PaymentIntent details to client
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    } catch (e) {
+      return res.status(400).send({
+        error: {
+          message: e.message,
+        },
+      });
+    }
+  }
+
+
 });
 
 
@@ -314,10 +315,24 @@ router.get('/create-payment-intent', async (req, res) => {
 // https://dashboard.stripe.com/test/webhooks
 router.post('/webhook', async (req, res) => {
   let data, eventType;
-
-  // Check if webhook signing is configured.
-  if (process.env.STRIPE_WEBHOOK_SECRET) {
-    console.log('STRIPE_WEBHOOK_SECRET: ', process.env.STRIPE_WEBHOOK_SECRET)
+  data = req.body.data;
+  console.log('/WEBHOOK - OrderID 0: ', data.object.metadata.order_id);
+  let orderid = data.object.metadata.order_id;
+  let customerid = data.object.customer;
+  var resu = 0;
+  if (orderid != null && orderid != 'undefined') {
+    resu = await db.get(orderid);
+    console.log('/WEBHOOK - result 0: ', resu);
+    // Check if webhook signing is configured.
+    if (resu.projectId != null && resu.projectId != 'undefined') {
+      var sett = await db.get(resu.projectId);
+      console.log('/WEBHOOK APP Config sett 0: ', sett);
+      var stripe_publishable_key = sett.stripe_publishable_key;
+      var stripe_wehook_segret = sett.stripe_wehook_segret;
+    }
+  }
+  if (stripe_wehook_segret) {
+    console.log('/WEBHOOK - STRIPE_WEBHOOK_SECRET 0: ', stripe_wehook_segret)
     // Retrieve the event by verifying the signature using the raw body and secret.
     let event;
     let signature = req.headers['stripe-signature'];
@@ -325,11 +340,12 @@ router.post('/webhook', async (req, res) => {
       event = stripe.webhooks.constructEvent(
         req.rawBody,
         signature,
-        process.env.STRIPE_WEBHOOK_SECRET
+        stripe_wehook_segret
       );
     } catch (err) {
       console.log(`⚠️  Webhook signature verification failed.`, err);
       return res.sendStatus(400);
+      // RETURN THE CONFIGURATION ERROR 
     }
     data = event.data;
     eventType = event.type;
@@ -339,6 +355,8 @@ router.post('/webhook', async (req, res) => {
     data = req.body.data;
     eventType = req.body.type;
   }
+  console.log('/WEBHOOK - Webhook Data', data);
+  console.log('/WEBHOOK - Webhook Type', eventType);
 
   if (eventType === 'payment_intent.succeeded') {
     // Funds have been captured
@@ -350,10 +368,10 @@ router.post('/webhook', async (req, res) => {
     const customHeaders = {
       "Content-Type": "application/json",
     }
-    console.log('Payment captured Data OrderID: ', data.object.metadata.order_id);
-    console.log('Payment captured Data CustomerID: ', data.object.customer);
-    let orderid = data.object.metadata.order_id;
-    let customerid = data.object.customer;
+    //console.log('Payment captured Data OrderID: ', data.object.metadata.order_id);
+    //console.log('Payment captured Data CustomerID: ', data.object.customer);
+    //orderid = data.object.metadata.order_id;
+    //customerid = data.object.customer;
     const bodydata = {
       orderid: orderid,
       customerid: customerid
@@ -372,11 +390,70 @@ router.post('/webhook', async (req, res) => {
     }
   } else if (eventType === 'payment_intent.payment_failed') {
     console.log('❌ Payment failed.');
+    // SEND THE MSG PAY FAILLED ON THE CHAT
+    // Read the payment data
+    //console.log('Payment failed OrderID: ', orderid);
+    //let orderid = data.object.metadata.order_id;
+    var resu = 0;
+    if (orderid != null && orderid != 'undefined') {
+      resu = await db.get(orderid);
+      console.log('/WEBHOOK - result payment_failed', resu);
+    }
+    let messageid = "";
+    const tdclient = new TiledeskClient(
+      {
+        APIKEY: '*',
+        projectId: resu.projectId,
+        token: resu.token
+      })
+    if (resu != null && resu != 'undefined') {
+      tdclient.sendSupportMessage(
+        resu.request_id,
+        { text: 'Payment of ' + resu.amount + ' ' + resu.currency + ' failed! Please try again.' },
+        (err, result) => {
+          assert(err === null);
+          assert(result != null);
+        });
+    }
+    //----------------------------------------------------------
   } else if (eventType === 'payment_intent.created') {
     console.log('🆕 Payment created.');
     // Then define and call a function to handle the event payment_intent.createdß
-    console.log('Payment created OrderID: ', data.object.metadata.order_id);
-    // DEVI RISPONDERE AL MSG CHIAMA IL GET e PASSA l'ORDER ID
+    // SEND THE MSG PAY CREATED ON THE CHAT
+    // Read the payment data
+    //console.log('Payment created OrderID 2: ', data.object.metadata.order_id);
+    //console.log('Payment created CustomerID 2: ', data.object.customer);
+    //let orderid = data.object.metadata.order_id;
+    //let customerid = data.object.customer;
+    var resu = 0;
+    if (orderid != null && orderid != 'undefined') {
+      resu = await db.get(orderid);
+      console.log('/WEBHOOK - result payment created 1', resu);
+    }
+    let messageid = "";
+    const tdclient = new TiledeskClient(
+      {
+        APIKEY: '*',
+        projectId: resu.projectId,
+        token: resu.token
+      })
+    var payment = { orderId: resu.orderId, projectId: resu.projectId, request_id: resu.request_id, currency: resu.currency, amount: resu.amount, description: resu.description, messageid: resu.messageid, token: resu.token, customer_mail: resu.customer_mail, customer_name: resu.customer_name, paid: false, created: 2 };
+    // SET created = 2
+    await db.set(orderid, payment);
+    if (resu.created == 1) {
+      if (resu != null && resu != 'undefined') {
+        tdclient.sendSupportMessage(
+          resu.request_id,
+          { text: 'Payment created! Please complete your payment.' },
+          (err, result) => {
+            assert(err === null);
+            assert(result != null);
+          });
+      }
+      // SET RESU.CREATED == 2 --> EVENT NOT TX
+      resu = await db.get(orderid);
+      console.log('/WEBHOOK - result payment created 2', resu);
+    }
   }
   res.sendStatus(200);
 });
@@ -384,7 +461,7 @@ router.post('/webhook', async (req, res) => {
 // UPDATE 15/12/2022 AGENT
 // CREATE A PAYMENT INTENT
 router.post('/payment/created', async (req, res) => {
-  console.log("req.body post", req.body)
+  //console.log("/payment/created - req.body post", req.body)
   let messageid = "";
   const token = req.body.token
   let amount = req.body.amount
@@ -403,22 +480,22 @@ router.post('/payment/created', async (req, res) => {
 
   //CONTROL IF THE ORDERID exists FOR THE MULTITENANT USE
   let orderIdOld = await db.get(orderId)
-  if (orderIdOld != null || orderIdOld != undefined) {
+  if (orderIdOld != null || orderIdOld != 'undefined') {
     let orderId = Math.floor(Math.random() * max)
   }
 
-  console.log('post-amount: ', amount)
-  console.log('post-currencyList: ', currency)
-  console.log('post-description: ', description)
-  console.log('post-projectId: ', projectId)
-  console.log('token: ', token)
-  console.log('orderId: ', orderId)
-  console.log('customer_mail: ', customer_mail)
-  console.log('customer_name: ', customer_name)
+  console.log('/payment/created - post-amount: ', amount)
+  console.log('/payment/created - post-currencyList: ', currency)
+  console.log('/payment/created - post-description: ', description)
+  console.log('/payment/created - post-projectId: ', projectId)
+  console.log('/payment/created - token: ', token)
+  console.log('/payment/created - orderId: ', orderId)
+  console.log('/payment/created - customer_mail: ', customer_mail)
+  console.log('/payment/created - customer_name: ', customer_name)
 
   // ATTENTION ONLY FOR DEBUG LOG 
-  var msg = DOMAIN + '/?&currency=' + currency + '&amount=' + amount + '&description=' + description + '&orderId=' + orderId + '&token=' + token + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId;
-  console.log('post-Call Stripe: ' + msg)
+  //var msg = DOMAIN + '/?&currency=' + currency + '&amount=' + amount + '&description=' + description + '&orderId=' + orderId + '&token=' + token + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId;
+  //console.log('post-Call Stripe: ' + msg)
 
   // create a TiledeskClient instance
   const tdclient = new TiledeskClient(
@@ -429,56 +506,54 @@ router.post('/payment/created', async (req, res) => {
     })
   var message = {
     type: "frame",
-    text: "Payment of " + currency + " " + amount + " !",
+    text: 'Pay: ' + currency + " " + amount,
     metadata: {
       src: DOMAIN + '/?currency=' + currency + '&amount=' + (amount * 100) + '&description=' + description + '&orderId=' + orderId + '&customer_mail=' + customer_mail + '&customer_name=' + customer_name + '&projectId=' + projectId,
       width: '100%',
       height: '330px'
     }
   }
-  console.log('post request_id: ', request_id)
+  console.log('/payment/created - post request_id: ', request_id)
   tdclient.sendSupportMessage(
     request_id,
     message, async (err, result) => {
       if (err) {
         return res.status(500).send({ error: err });
       }
-      console.log('post-result._id', result._id);
+      console.log('/payment/created - post-result._id', result._id);
       messageid = result._id;
       // Read the old orderId
       //save your app's status in the key-value store as "completed"
-      var payment = { orderId: orderId, projectId: projectId, request_id: request_id, currency: currency, amount: amount, description: description, messageid: messageid, token: token, customer_mail: customer_mail, customer_name: customer_name, paid: false };
+      var payment = { orderId: orderId, projectId: projectId, request_id: request_id, currency: currency, amount: amount, description: description, messageid: messageid, token: token, customer_mail: customer_mail, customer_name: customer_name, paid: false, created: 0 };
       //orderId is used with key primary into the DB
       // -- ATTENTO NON VA BENE PER IL MULTITENANT --
       await db.set(orderId, payment);
-      console.log('post-orderId', orderId);
+      console.log('/payment/created - post-orderId', orderId);
       const resu = await db.get(orderId)
-      console.log('post-result', resu);
+      console.log('/payment/created - post-result', resu);
     });
 
   res.send('Payment created!');
-  //const path = resolve(process.env.STATIC_DIR + '/created.html');
-  //res.sendFile(path);
 });
 
 //SEND SUCCEEDED MSG ON CHAT
 router.post('/payment/succeeded', async (req, res) => {
   const orderid = req.body.orderid
   const customerid = req.body.customerid
-  console.log("return orderId: ", orderid);
-  console.log("return customerId: ", customerid);
+  console.log("/payment/succeeded - return orderId: ", orderid);
+  console.log("/payment/succeeded - return customerId: ", customerid);
   // Read the payment data
   var resu = 0;
-  if (orderid != null && orderid != undefined) {
+  if (orderid != null && orderid != 'undefined') {
     resu = await db.get(orderid);
-    console.log('post-result', resu);
+    console.log('/payment/succeeded - post-result', resu);
   }
   // CLOSE THE PAYMENT ON  DB
-  if (resu != null && resu != undefined) {
+  if (resu != null && resu != 'undefined') {
     var payment = { orderId: resu.orderid, projectId: resu.projectId, request_id: resu.request_id, currency: resu.currency, amount: resu.amount, description: resu.description, messageid: resu.messageid, token: resu.token, customer_mail: resu.customer_mail, customer_name: resu.customer_name, paid: true };
     await db.set(orderid, payment);
   }
-  console.log('End-Payment', payment);
+  console.log('/payment/succeeded - End-Payment', payment);
 
   // SEND THE MSG PAY CORRECT ON THE CHAT
   let messageid = "";
@@ -488,10 +563,10 @@ router.post('/payment/succeeded', async (req, res) => {
       projectId: resu.projectId,
       token: resu.token
     })
-  if (resu != null && resu != undefined) {
+  if (resu != null && resu != 'undefined') {
     tdclient.sendSupportMessage(
       resu.request_id,
-      { text: 'Payment of ' + resu.amount + ' ' + resu.currency + ' successful! Thank you.' },
+      { text: 'Payment of ' + resu.amount + ' ' + resu.currency + ' completed successfully. Thank you!' },
       (err, result) => {
         assert(err === null);
         assert(result != null);
@@ -503,11 +578,6 @@ router.post('/payment/succeeded', async (req, res) => {
 });
 //END UPDATE
 
-/*
-app.listen(4242, () =>
-  console.log(`Server Node Started`)
-);
-*/
 // UPDATE 05/01/23
 module.exports = router;
 

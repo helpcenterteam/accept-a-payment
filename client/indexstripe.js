@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Get URL string
   var url_string = window.location.href;
   var url = new URL(url_string);
-  console.log('url', url);
+  console.log('CLIENT - url', url);
   // CONFIG KEY SEGRET
   // Load the publishable key from the server. The publishable key
   // is set in your .env file.
   var projectId = url.searchParams.get("projectId");
-  console.log('USER KEY - projectId', projectId);
+  console.log('CLIENT - projectId', projectId);
   const { publishableKey } = await fetch('/config?projectId=' + projectId).then((r) => r.json());
   if (!publishableKey) {
     addMessage(
@@ -15,34 +15,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     );
     alert('Please set your Stripe publishable API key in the configure function');
   } else {
-    console.log('USER KEY - publishableKey', publishableKey);
+    console.log('CLIENT - publishableKey', publishableKey);
   }
 
   const stripe = Stripe(publishableKey, {
     apiVersion: '2020-08-27',
   });
 
-  console.log('stripe: ', stripe)
+  console.log('CLIENT - stripe: ', stripe)
   //-------------------------------------------
   var currency = url.searchParams.get("currency");
-  console.log('currency', currency);
+  console.log('CLIENT - currency', currency);
   var amount = url.searchParams.get("amount");
-  console.log('amount', amount);
+  console.log('CLIENT - amount', amount);
   var description = url.searchParams.get("description");
-  console.log('description', description);
+  console.log('CLIENT - description', description);
   var orderId = url.searchParams.get("orderId");
-  console.log('orderId', orderId);
+  console.log('CLIENT - orderId', orderId);
   // CUSTOMER
   var customer_mail = url.searchParams.get("customer_mail");
-  console.log('customer_mail', customer_mail);
+  console.log('CLIENT - customer_mail', customer_mail);
   var customer_name = url.searchParams.get("customer_name");
-  console.log('customer_name', customer_name);
+  console.log('CLIENT - customer_name', customer_name);
 
   // On page load, we create a PaymentIntent on the server so that we have its clientSecret to
   // initialize the instance of Elements below. The PaymentIntent settings configure which payment
   // method types to display in the PaymentElement.
   //ATTENTO URL DA MODIFICARE CON PRODUZIONE
-  console.log('DOMAIN - url', url.origin);
+  console.log('CLIENT - DOMAIN - url', url.origin);
   let url_post = new URL(url.origin + '/create-payment-intent');
   let params = { 'currency': currency, 'amount': amount, 'description': description, 'orderId': orderId, 'customer_mail': customer_mail, 'customer_name': customer_name };
   url_post.search = new URLSearchParams(params);
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     addMessage(backendError.message);
   }
   addMessage(`Client secret returned.`);
-  console.log('clientSecret', clientSecret);
+  console.log('CLIENT - clientSecret', clientSecret);
 
   // Initialize Stripe Elements with the PaymentIntent's clientSecret,
   // then mount the payment element.
