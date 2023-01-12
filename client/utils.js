@@ -5,7 +5,7 @@ const addMessage = (message) => {
   //messagesDiv.style.display = 'block';
   messagesDiv.style.display = 'none';
   const messageWithLinks = addDashboardLinks(message);
-  messagesDiv.innerHTML += `> ${messageWithLinks}<br>`;
+  messagesDiv.innerHTML += `<br>${messageWithLinks}<br>`;
   console.log(`Debug: ${message}`);
 };
 

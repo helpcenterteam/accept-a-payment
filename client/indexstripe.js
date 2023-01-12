@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     addMessage(
       'No publishable key returned from the server. Please configure the App and try again'
     );
-    alert('Please set your Stripe publishable API key in the configure function');
+    // ATTENTION: COMMENT
+    //alert('Please set your Stripe publishable API key in the configure function');
   } else {
     console.log('CLIENT - publishableKey', publishableKey);
   }

@@ -63,6 +63,7 @@
           <input type="email" class="form-control copy-form custom-input" name="customer_mail" id="customer_mail" placeholder="Customer mail" oninput="reWrite('customer_mail')" required/>
         </div>
       </div>
+      <label class="input-error" id="app_err1" style="visibility: hidden;">the email is incorrect/required</label>
    </div>
 
     <div class="form-group">
@@ -245,6 +246,7 @@
             <input type="number" class="form-control copy-form custom-input" name="amount" id="amount" value=0 min=0 required placeholder="Payment amount" oninput="reWrite('amount')" />
           </div>
          </div>
+      <label class="input-error" id="app_err2" style="visibility: hidden;">The amount must be positive!</label>
       </div>
      
     <div class="form-group">
@@ -376,7 +378,7 @@
       console.log("Payment/amount insert: ", amount.value);
       console.log("Payment/customer_name: ", customer_name.value);
       console.log("Payment/mail_correct: ", mail_correct);
-      if ( mail_correct == true && customer_mail.value != '' && customer_mail.value != 'The email is incorrect!'  ) { 
+      if ( mail_correct == true && customer_mail.value != '' ) { 
       if ((amount.value*1) >0 ) {
         console.log('token.value 2: ',token.value);
         if (token.value == 'undefined') {
@@ -406,10 +408,15 @@
       }
       }  else {
         amount.value = 0;
+        document.getElementById('app_err2').style.visibility = "visible";
+        console.log('app_err2 is visible',document.getElementById('app_err2').style.visible);
       }
       } else {
-        customer_mail.value = 'The email is incorrect!';
-        customer_mail.style.color='red';
+        // THE MAIL IS INCORRECT
+        //customer_mail.value = 'The email is incorrect!';
+        //customer_mail.style.color='red';
+        document.getElementById('app_err1').style.visibility = "visible";
+        console.log('app_err is visible1',document.getElementById('app_err1').style.visible);
       } 
     });
 
@@ -417,6 +424,16 @@
     function reWrite(element) {
       document.getElementById(element);
       document.getElementById(element).style.color='black';
+      if(element === 'customer_mail'){
+        document.getElementById('app_err1').style.visibility = "hidden";
+        console.log('app_err is hidden',document.getElementById('app_err1').style.visible);
+      }
+      if(element === 'amount'){
+        document.getElementById('app_err2').style.visibility = "hidden";
+        console.log('app_err is hidden',document.getElementById('app_err2').style.visible);
+      }
+
+      
     }
     // SET CACHE TOKEN
      function setData(data) {

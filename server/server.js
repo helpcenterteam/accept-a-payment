@@ -194,13 +194,11 @@ router.post('/configure', async (req, res) => {
   console.log('/configure -  APP Config stripe_wehook_segret', stripe_wehook_segret);
   var log = true;
   // Retrieve the event by verifying the signature using the raw body and secret.
-  if (true) {
-  // SETTINGS THE APP FIRST TIME!
+  if (stripe_publishable_key != 'undefined' && stripe_wehook_segret != 'undefined' && stripe_publishable_key != null && stripe_wehook_segret != null) {
+  // SETTINGS THE APP STRIPE!
     var settings = { stripe_publishable_key: stripe_publishable_key, stripe_wehook_segret: stripe_wehook_segret };
     await db.set(projectId, settings);
     console.log('/configure - Sett settings APP!', settings);
-    //var page = '/index.html';
-    //var dir = '/payment';
     res.status(200).send({ success: true });
   } else {
     res.status(400).send(err);
@@ -330,12 +328,15 @@ router.post('/webhook', async (req, res) => {
       var stripe_publishable_key = sett.stripe_publishable_key;
       var stripe_wehook_segret = sett.stripe_wehook_segret;
     }
-  }
-  if (stripe_wehook_segret) {
+  //}
+  
+  if (stripe_publishable_key != 'undefined' && stripe_publishable_key != null && stripe_wehook_segret != 'undefined' && stripe_wehook_segret != null) {
     console.log('/WEBHOOK - STRIPE_WEBHOOK_SECRET 0: ', stripe_wehook_segret)
+    console.log('/WEBHOOK - stripe_publishable_key 0: ', stripe_publishable_key)
     // Retrieve the event by verifying the signature using the raw body and secret.
     let event;
     let signature = req.headers['stripe-signature'];
+    //console.log('/WEBHOOK - stripe-signature 0: ', signature)
     try {
       event = stripe.webhooks.constructEvent(
         req.rawBody,
@@ -344,8 +345,23 @@ router.post('/webhook', async (req, res) => {
       );
     } catch (err) {
       console.log(`⚠️  Webhook signature verification failed.`, err);
+      //return res.sendStatus(400);
+      // RETURN THE CONFIGURATION ERROR ON THE CHAT
+      const tdclient = new TiledeskClient(
+        {
+          APIKEY: '*',
+          projectId: resu.projectId,
+          token: resu.token
+        })
+
+       tdclient.sendSupportMessage(
+          resu.request_id,
+          { text: '⚠️  No publishable key returned from the server or Webhook signature verification failed. Please configure the App and try again: '},
+          (err, result) => {
+            assert(err === null);
+            assert(result != null);
+          });
       return res.sendStatus(400);
-      // RETURN THE CONFIGURATION ERROR 
     }
     data = event.data;
     eventType = event.type;
@@ -456,6 +472,10 @@ router.post('/webhook', async (req, res) => {
     }
   }
   res.sendStatus(200);
+} else {
+  res.sendStatus(400); 
+}
+            
 });
 
 // UPDATE 15/12/2022 AGENT
